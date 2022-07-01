@@ -1,4 +1,4 @@
-name: Docker image build
+name: For each commit and PR
 on:
   push:
     branches:

@@ -10,12 +10,6 @@ env:
   CGO_ENABLED: 0
 
 jobs:
-  echo:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echo
-        run: echo "Hello World"
-
   verify:
     runs-on: ubuntu-latest
     steps:
