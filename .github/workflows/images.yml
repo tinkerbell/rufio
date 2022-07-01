@@ -1,4 +1,4 @@
-name: Build Docker Images
+name: Docker image build
 on:
   push:
     branches:
@@ -15,8 +15,7 @@ jobs:
         id: docker.meta
         uses: docker/metadata-action@v4
         with:
-          images: |
-            name/app
+          images: quay.io/tinkerbell/rufio
           tags: |
             type=ref,event=branch
             type=ref,event=pr
