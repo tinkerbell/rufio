@@ -2,7 +2,7 @@ name: Build Docker Images
 on:
   push:
     branches:
-      - "feature/push-images"
+      - "*"
     tags-ignore:
       - "v*"
   pull_request:
