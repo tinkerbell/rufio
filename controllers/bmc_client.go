@@ -37,6 +37,9 @@ func NewBMCClientFactoryFunc(ctx context.Context) BMCClientFactoryFunc {
 	return func(ctx context.Context, hostIP, port, username, password string) (BMCClient, error) {
 		client := bmclib.NewClient(hostIP, port, username, password)
 
+		using := client.Registry.Using
+		client.Registry.Drivers = append(using("redfish"), using("ipmi")...)
+
 		// TODO (pokearu): Make an option
 		client.Registry.Drivers = client.Registry.PreferDriver("gofish")
 		if err := client.Open(ctx); err != nil {
