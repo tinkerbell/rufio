@@ -60,7 +60,7 @@ func NewMachineReconciler(c client.Client, recorder record.EventRecorder, bmcCli
 //+kubebuilder:rbac:groups=bmc.tinkerbell.org,resources=machines,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=bmc.tinkerbell.org,resources=machines/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=bmc.tinkerbell.org,resources=machines/finalizers,verbs=update
-//+kubebuilder:rbac:groups="",resources=secrets;,verbs=get;list;watch
+//+kubebuilder:rbac:groups="",resources=secrets;,verbs=get;watch
 
 // Reconcile reports on the state of a Machine. It does not change the state of the Machine in any way.
 // Updates the Power status and conditions accordingly.
