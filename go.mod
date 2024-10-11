@@ -6,7 +6,7 @@ toolchain go1.22.2
 
 require (
 	dario.cat/mergo v1.0.1
-	github.com/bmc-toolbox/bmclib/v2 v2.2.6
+	github.com/bmc-toolbox/bmclib/v2 v2.3.2
 	github.com/go-logr/logr v1.4.2
 	github.com/go-logr/zerologr v1.2.3
 	github.com/google/go-cmp v0.6.0
@@ -25,7 +25,7 @@ require (
 	github.com/VictorLowther/simplexml v0.0.0-20180716164440-0bff93621230 // indirect
 	github.com/VictorLowther/soap v0.0.0-20150314151524-8e36fca84b22 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/bmc-toolbox/common v0.0.0-20231204194243-7bcbccab7116 // indirect
+	github.com/bmc-toolbox/common v0.0.0-20240806132831-ba8adc6a35e3 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/emicklei/go-restful/v3 v3.11.0 // indirect
@@ -62,7 +62,7 @@ require (
 	github.com/prometheus/procfs v0.12.0 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stmcginnis/gofish v0.15.1-0.20231121142100-22a60a77be91 // indirect
+	github.com/stmcginnis/gofish v0.19.0 // indirect
 	go.opentelemetry.io/otel v1.24.0 // indirect
 	go.opentelemetry.io/otel/trace v1.24.0 // indirect
 	golang.org/x/exp v0.0.0-20240409090435-93d18d7e34b8 // indirect
