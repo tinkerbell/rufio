@@ -26,6 +26,7 @@ import (
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	ctrlcontroller "sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 
 	"github.com/tinkerbell/rufio/api/v1alpha1"
@@ -221,7 +222,7 @@ func (r *JobReconciler) patchStatus(ctx context.Context, job *v1alpha1.Job, patc
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *JobReconciler) SetupWithManager(ctx context.Context, mgr ctrl.Manager) error {
+func (r *JobReconciler) SetupWithManager(ctx context.Context, mgr ctrl.Manager, opts ctrlcontroller.Options) error {
 	if err := mgr.GetFieldIndexer().IndexField(
 		ctx,
 		&v1alpha1.Task{},
@@ -233,6 +234,7 @@ func (r *JobReconciler) SetupWithManager(ctx context.Context, mgr ctrl.Manager) 
 
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&v1alpha1.Job{}).
+		WithOptions(opts).
 		Watches(
 			&v1alpha1.Task{},
 			handler.EnqueueRequestForOwner(
