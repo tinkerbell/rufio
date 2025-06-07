@@ -29,6 +29,8 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/client-go/tools/record"
+	ctrlcontroller "sigs.k8s.io/controller-runtime/pkg/controller"
+
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -210,8 +212,9 @@ func retrieveHMACSecrets(ctx context.Context, c client.Client, hmacSecrets v1alp
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *MachineReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *MachineReconciler) SetupWithManager(mgr ctrl.Manager, opts ctrlcontroller.Options) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&v1alpha1.Machine{}).
+		WithOptions(opts).
 		Complete(r)
 }

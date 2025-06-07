@@ -33,16 +33,16 @@ import (
 	"github.com/peterbourgon/ff/v3"
 	"github.com/peterbourgon/ff/v3/ffcli"
 	"github.com/rs/zerolog"
+	"github.com/tinkerbell/rufio/api/v1alpha1"
+	"github.com/tinkerbell/rufio/controller"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/cache"
+	ctrlcontroller "sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
-
-	"github.com/tinkerbell/rufio/api/v1alpha1"
-	"github.com/tinkerbell/rufio/controller"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -86,6 +86,7 @@ func main() {
 	var kubeconfig string
 	var kubeNamespace string
 	var bmcConnectTimeout time.Duration
+	var maxConcurrentReconciles int
 	fs := flag.NewFlagSet(appName, flag.ExitOnError)
 	fs.StringVar(&metricsAddr, "metrics-bind-address", ":8080", "The address the metric endpoint binds to.")
 	fs.StringVar(&probeAddr, "health-probe-bind-address", ":8081", "The address the probe endpoint binds to.")
@@ -96,6 +97,7 @@ func main() {
 	fs.StringVar(&kubeconfig, "kubeconfig", "", "Absolute path to the kubeconfig file.")
 	fs.StringVar(&kubeNamespace, "kube-namespace", "", "Namespace that the controller watches to reconcile objects.")
 	fs.DurationVar(&bmcConnectTimeout, "bmc-connect-timeout", 60*time.Second, "Timeout for establishing a connection to BMCs.")
+	fs.IntVar(&maxConcurrentReconciles, "max-concurrent-reconciles", 1, "Maximum number of concurrent reconciles per controller.")
 	cli := &ffcli.Command{
 		Name:    appName,
 		FlagSet: fs,
@@ -144,7 +146,7 @@ func main() {
 	bmcClientFactory := controller.NewClientFunc(bmcConnectTimeout)
 
 	// Setup controller reconcilers
-	setupReconcilers(ctx, mgr, bmcClientFactory)
+	setupReconcilers(ctx, mgr, bmcClientFactory, maxConcurrentReconciles)
 
 	//+kubebuilder:scaffold:builder
 
@@ -175,12 +177,12 @@ func newClientConfig(kubeAPIServer, kubeconfig string) clientcmd.ClientConfig {
 }
 
 // setupReconcilers initializes the controllers with the Manager.
-func setupReconcilers(ctx context.Context, mgr ctrl.Manager, bmcClientFactory controller.ClientFunc) {
+func setupReconcilers(ctx context.Context, mgr ctrl.Manager, bmcClientFactory controller.ClientFunc, maxConcurrentReconciles int) {
 	err := (controller.NewMachineReconciler(
 		mgr.GetClient(),
 		mgr.GetEventRecorderFor("machine-controller"),
 		bmcClientFactory,
-	)).SetupWithManager(mgr)
+	)).SetupWithManager(mgr, ctrlcontroller.Options{MaxConcurrentReconciles: maxConcurrentReconciles})
 	if err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Machine")
 		os.Exit(1)
@@ -188,7 +190,7 @@ func setupReconcilers(ctx context.Context, mgr ctrl.Manager, bmcClientFactory co
 
 	err = (controller.NewJobReconciler(
 		mgr.GetClient(),
-	)).SetupWithManager(ctx, mgr)
+	)).SetupWithManager(ctx, mgr, ctrlcontroller.Options{MaxConcurrentReconciles: maxConcurrentReconciles})
 	if err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Job")
 		os.Exit(1)
@@ -197,7 +199,7 @@ func setupReconcilers(ctx context.Context, mgr ctrl.Manager, bmcClientFactory co
 	err = (controller.NewTaskReconciler(
 		mgr.GetClient(),
 		bmcClientFactory,
-	)).SetupWithManager(mgr)
+	)).SetupWithManager(mgr, ctrlcontroller.Options{MaxConcurrentReconciles: maxConcurrentReconciles})
 	if err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "Task")
 		os.Exit(1)

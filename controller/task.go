@@ -25,6 +25,7 @@ import (
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	ctrlcontroller "sigs.k8s.io/controller-runtime/pkg/controller"
 
 	"github.com/tinkerbell/rufio/api/v1alpha1"
 )
@@ -274,8 +275,9 @@ func (r *TaskReconciler) patchStatus(ctx context.Context, task *v1alpha1.Task, p
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *TaskReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *TaskReconciler) SetupWithManager(mgr ctrl.Manager, opts ctrlcontroller.Options) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&v1alpha1.Task{}).
+		WithOptions(opts).
 		Complete(r)
 }
