@@ -2,7 +2,7 @@ module github.com/tinkerbell/rufio
 
 go 1.22.0
 
-toolchain go1.22.2
+toolchain go1.24.1
 
 require (
 	dario.cat/mergo v1.0.1
@@ -13,7 +13,7 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/jacobweinstock/registrar v0.4.7
 	github.com/peterbourgon/ff/v3 v3.4.0
-	github.com/rs/zerolog v1.33.0
+	github.com/rs/zerolog v1.34.0
 	golang.org/x/tools v0.29.0
 	k8s.io/api v0.31.3
 	k8s.io/apimachinery v0.31.3
