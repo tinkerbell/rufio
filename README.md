@@ -1,3 +1,8 @@
+> [!IMPORTANT]  
+> The Rufio repo has been deprecated. All functionality has been moved to https://github.com/tinkerbell/tinkerbell.
+> For more details, see the roadmap issue [#41](https://github.com/tinkerbell/roadmap/issues/41).
+> This repository is scheduled for archive by the end of 2025.
+
 # Rufio
 
 ![For each commit and PR](https://github.com/tinkerbell/rufio/workflows/For%20each%20commit%20and%20PR/badge.svg)
