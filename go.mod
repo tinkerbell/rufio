@@ -10,7 +10,7 @@ require (
 	github.com/ccoveille/go-safecast v1.5.0
 	github.com/go-logr/logr v1.4.2
 	github.com/go-logr/zerologr v1.2.3
-	github.com/google/go-cmp v0.6.0
+	github.com/google/go-cmp v0.7.0
 	github.com/jacobweinstock/registrar v0.4.7
 	github.com/peterbourgon/ff/v3 v3.4.0
 	github.com/rs/zerolog v1.33.0
